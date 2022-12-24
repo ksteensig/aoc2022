@@ -69,29 +69,23 @@ parse = do
 main = do
   input <- load (run parse) "data/day5"
   print $ case input of
-    (_, Right (ds, cs, ms)) -> map (\(Occupied s) -> head s) $ map head $ foldl part1 cs ms 
+    (_, Right (ds, cs, ms)) -> part1 cs ms 
   print $ case input of
-    (_, Right (ds, cs, ms)) -> map (\(Occupied s) -> head s) $ map head $ foldl part2 cs ms 
+    (_, Right (ds, cs, ms)) -> part2 cs ms
 
 
-part1 cols (Move amount from to) = cols''
+part1 cols moves = map (\(Occupied s) -> head s) $ map head $ foldl movement' cols moves 
+  where
+    movement' = movement reverse
+  
+part2 cols moves = map (\(Occupied s) -> head s) $ map head $ foldl movement' cols moves 
+  where
+    movement' = movement id
+
+movement order cols (Move amount from to) = cols''
   where
     (first, from':rest) = splitAt (from-1) cols
-    vals = reverse $ take amount from'
-    from'' = drop amount from'
-    
-    cols' = (first ++ from'':rest)
-
-    (first', to':rest') = splitAt (to-1) cols'
-    to'' = vals ++ to'
-  
-    cols'' = (first' ++ to'':rest')
-
-  
-part2 cols (Move amount from to) = cols''
-  where
-    (first, from':rest) = splitAt (from-1) cols
-    vals = take amount from'
+    vals = order $ take amount from'
     from'' = drop amount from'
     
     cols' = (first ++ from'':rest)
