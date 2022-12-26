@@ -97,6 +97,7 @@ satisfy expected predicate = try $ do
     then return c
     else parseError expected [c]
 
+nchar c = satisfy ("not char "++[c])     (/= c)
 char c = satisfy ("char "++[c])     (== c)
 space  = satisfy "space"            (== ' ')
 digit  = satisfy "digit" Data.Char.isDigit
