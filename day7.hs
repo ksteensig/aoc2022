@@ -70,8 +70,8 @@ main = do
     input <- load (P.run parse) "data/day7"
     print $ case input of
         (_, Right tree) -> part1 tree
-    -- print $ case input of
-    --     (_, Right tree) -> part2 tree
+    print $ case input of
+        (_, Right tree) -> part2 tree
 
 findLessThan _ (File name size) = 0
 findLessThan thresh (Dir name files size)
@@ -81,10 +81,11 @@ findLessThan thresh (Dir name files size)
 thresh = 100000
 part1 tree = findLessThan thresh tree
 
--- required = 70000000
--- findSmallest _ size' (File name size) = size' 
--- findSmallest occupied size' (Dir name files size)
---     | (required - occupied <= size) && (size < size')   = min size $ minimum $ map (findSmallest occupied size) files
---     | otherwise                                         = min size' $ minimum $ map (findSmallest occupied size') files
+required    = 30000000
+total       = 70000000
+findSmallest _ size' (File name size) = size' 
+findSmallest free size' (Dir name files size)
+    | (required - free <= size) = min size $ min size' $ minimum $ map (findSmallest free size) files
+    | otherwise                     = min size' $ minimum $ map (findSmallest free size') files
 
--- part2 (Dir name files size) = findSmallest size size (Dir name files size)
+part2 (Dir name files size) = findSmallest (total - size) size (Dir name files size)
