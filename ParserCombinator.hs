@@ -111,5 +111,10 @@ int = do
     ds <- ParserCombinator.many1 digit
     return $ readInt ds
 
+int' = try $ do
+  _ <- char '-'
+  i <- int
+  return (-i)
+
 run :: Parser a -> String -> (String, Either ParseError a)
 run p s = runParser p s
