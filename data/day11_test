@@ -1,0 +1,6 @@
+Monkey 2:
+  Starting items: 79
+  Operation: new = old * old
+  Test: divisible by 13
+    If true: throw to monkey 1
+    If false: throw to monkey 3
